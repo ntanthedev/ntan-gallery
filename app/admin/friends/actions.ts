@@ -44,9 +44,7 @@ export async function saveFriendAction(values: FriendFormValues) {
 
   const orderIndex = existing?.order_index ?? (await getNextOrderIndex());
 
-  type FriendInsert = Database["public"]["Tables"]["friends"]["Insert"];
-
-  const payload: FriendInsert = {
+  const commonData = {
     name: parsed.name,
     slug: parsed.slug,
     nickname: parsed.nickname || null,
@@ -57,21 +55,34 @@ export async function saveFriendAction(values: FriendFormValues) {
     theme_config: {
       primary: parsed.theme.primary,
       secondary: parsed.theme.secondary,
-    } as Database["public"]["Tables"]["friends"]["Row"]["theme_config"],
+    },
     is_published: parsed.isPublished,
     order_index: orderIndex,
     access_key_hash: accessKeyHash,
   };
 
-  if (existing?.id) {
-    payload.id = existing.id;
-  }
+  let data, error;
 
-  const { data, error } = await supabaseServiceRole
-    .from("friends")
-    .upsert(payload as any)
-    .select()
-    .single();
+  if (existing) {
+    // Update existing friend
+    const result = await supabaseServiceRole
+      .from("friends")
+      .update(commonData)
+      .eq("id", existing.id)
+      .select()
+      .single();
+    data = result.data;
+    error = result.error;
+  } else {
+    // Insert new friend
+    const result = await supabaseServiceRole
+      .from("friends")
+      .insert(commonData)
+      .select()
+      .single();
+    data = result.data;
+    error = result.error;
+  }
 
   if (error) {
     throw new Error(error.message);
