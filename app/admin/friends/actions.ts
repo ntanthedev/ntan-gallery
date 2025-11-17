@@ -64,21 +64,21 @@ export async function saveFriendAction(values: FriendFormValues) {
 
   if (existing) {
     // Update existing friend
-    const result = await supabaseServiceRole
+    const result = await (supabaseServiceRole
       .from("friends")
-      .update(commonData)
+      .update(commonData as any)
       .eq("id", existing.id)
       .select()
-      .single();
+      .single() as any);
     data = result.data;
     error = result.error;
   } else {
     // Insert new friend
-    const result = await supabaseServiceRole
+    const result = await (supabaseServiceRole
       .from("friends")
-      .insert(commonData)
+      .insert(commonData as any)
       .select()
-      .single();
+      .single() as any);
     data = result.data;
     error = result.error;
   }
