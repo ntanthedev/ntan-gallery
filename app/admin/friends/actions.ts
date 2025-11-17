@@ -44,8 +44,9 @@ export async function saveFriendAction(values: FriendFormValues) {
 
   const orderIndex = existing?.order_index ?? (await getNextOrderIndex());
 
-  const payload: Database["public"]["Tables"]["friends"]["Insert"] = {
-    ...(existing?.id ? { id: existing.id } : {}),
+  type FriendInsert = Database["public"]["Tables"]["friends"]["Insert"];
+
+  const payload: FriendInsert = {
     name: parsed.name,
     slug: parsed.slug,
     nickname: parsed.nickname || null,
@@ -56,15 +57,19 @@ export async function saveFriendAction(values: FriendFormValues) {
     theme_config: {
       primary: parsed.theme.primary,
       secondary: parsed.theme.secondary,
-    },
+    } as Database["public"]["Tables"]["friends"]["Row"]["theme_config"],
     is_published: parsed.isPublished,
     order_index: orderIndex,
     access_key_hash: accessKeyHash,
   };
 
+  if (existing?.id) {
+    payload.id = existing.id;
+  }
+
   const { data, error } = await supabaseServiceRole
     .from("friends")
-    .upsert(payload)
+    .upsert(payload as any)
     .select()
     .single();
 
