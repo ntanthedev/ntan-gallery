@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
@@ -209,16 +210,16 @@ export function FriendForm({
               )}
             />
             <div className="space-y-2">
-              <FormLabel>Theme</FormLabel>
+              <Label>Theme</Label>
               <div className="flex gap-4">
                 <FormField
                   control={form.control}
                   name="theme.primary"
                   render={({ field }) => (
                     <FormItem className="flex flex-col gap-1">
-                      <FormLabel className="text-xs text-muted-foreground">
+                      <Label className="text-xs text-muted-foreground">
                         Primary
-                      </FormLabel>
+                      </Label>
                       <FormControl>
                         <Input type="color" {...field} />
                       </FormControl>
@@ -230,9 +231,9 @@ export function FriendForm({
                   name="theme.secondary"
                   render={({ field }) => (
                     <FormItem className="flex flex-col gap-1">
-                      <FormLabel className="text-xs text-muted-foreground">
+                      <Label className="text-xs text-muted-foreground">
                         Secondary
-                      </FormLabel>
+                      </Label>
                       <FormControl>
                         <Input type="color" {...field} />
                       </FormControl>

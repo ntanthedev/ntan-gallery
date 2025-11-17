@@ -8,7 +8,7 @@ import { friendFormSchema, type FriendFormValues } from "@/app/admin/friends/sch
 import { getFriendById } from "@/lib/data/friends";
 import { supabaseServiceRole } from "@/lib/supabase/service";
 
-async function getNextOrderIndex() {
+async function getNextOrderIndex(): Promise<number> {
   const { data } = await supabaseServiceRole
     .from("friends")
     .select("order_index")
@@ -20,7 +20,7 @@ async function getNextOrderIndex() {
     return 1;
   }
 
-  return (data.order_index ?? 0) + 1;
+  return ((data as { order_index: number }).order_index ?? 0) + 1;
 }
 
 export async function saveFriendAction(values: FriendFormValues) {
