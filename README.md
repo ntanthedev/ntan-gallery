@@ -89,10 +89,10 @@ lib/                # Supabase client, auth helpers, utils
 - [x] Base project + Tailwind 3 + shadcn init
 - [x] Landing page mô tả kiến trúc, upload flow, checklist
 - [x] Mẫu env cho Supabase / bảo mật
-- [ ] Schema Supabase + migrations
-- [ ] Luồng verify key & render thư
-- [ ] Admin panel CRUD + upload pipeline
-- [ ] Testing + deployment checklist
+- [x] Schema Supabase + migrations
+- [x] Luồng verify key & render thư
+- [x] Admin panel CRUD + upload pipeline
+- [x] Testing + deployment checklist
 
 ### Định hướng tiếp theo
 
@@ -100,3 +100,4 @@ lib/                # Supabase client, auth helpers, utils
 - Cấu hình Supabase Auth (chỉ whitelist admin email)
 - Xây API `/api/verify-key` + tokens HttpOnly
 - Hoàn thiện admin dashboard với drag & drop + upload realtime
+- Build app lên Vercel 
