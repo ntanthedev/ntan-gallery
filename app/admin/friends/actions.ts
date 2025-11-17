@@ -7,7 +7,6 @@ import { requireAdminSession } from "@/lib/auth/admin";
 import { friendFormSchema, type FriendFormValues } from "@/app/admin/friends/schema";
 import { getFriendById } from "@/lib/data/friends";
 import { supabaseServiceRole } from "@/lib/supabase/service";
-import type { Database } from "@/types/database";
 
 async function getNextOrderIndex(): Promise<number> {
   const { data } = await supabaseServiceRole
