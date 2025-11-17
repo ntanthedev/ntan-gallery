@@ -37,6 +37,10 @@ export async function saveFriendAction(values: FriendFormValues) {
     ? await bcrypt.hash(parsed.accessKey, 12)
     : existing?.access_key_hash;
 
+  if (!accessKeyHash) {
+    throw new Error("Access key hash không hợp lệ.");
+  }
+
   const orderIndex = existing?.order_index ?? (await getNextOrderIndex());
 
   const payload = {
