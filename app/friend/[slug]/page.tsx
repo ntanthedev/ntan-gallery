@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 
 import { FriendAccessForm } from "@/components/friend/friend-access-form";
 import { FriendGalleryGrid } from "@/components/friend/gallery-grid";
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { getFriendSessionFromCookies } from "@/lib/auth/friend";
 import { getFriendBySlug } from "@/lib/data/friends";
+import { getStoragePublicUrl } from "@/lib/storage";
 
 type FriendPageProps = {
   params: { slug: string };
@@ -44,9 +46,24 @@ export default async function FriendPage({ params }: FriendPageProps) {
 
   const session = await getFriendSessionFromCookies(friend.slug);
   const unlocked = session?.friendId === friend.id;
+  const mainPhotoUrl = getStoragePublicUrl(friend.main_photo);
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-10 px-6 py-12">
+      {mainPhotoUrl && (
+        <div className="relative -mx-6 -mt-12 mb-6 aspect-[21/9] w-[calc(100%+3rem)] overflow-hidden md:mx-0 md:mt-0 md:w-full md:rounded-3xl">
+          <Image
+            src={mainPhotoUrl}
+            alt={friend.name}
+            fill
+            priority
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 896px"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent" />
+        </div>
+      )}
+
       <header className="space-y-3">
         <Badge variant="outline" className="w-fit">
           {friend.nickname ?? friend.name}

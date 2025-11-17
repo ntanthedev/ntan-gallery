@@ -1,7 +1,11 @@
+"use client";
+
+import Image from "next/image";
 import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getStoragePublicUrl } from "@/lib/storage";
 
 type Props = {
   photos: string[];
@@ -38,44 +42,66 @@ export function GalleryListEditor({ photos, onChange }: Props) {
 
   return (
     <div className="space-y-3">
-      {photos.map((photo, index) => (
-        <div
-          key={photo + index}
-          className="flex items-center gap-2 rounded-xl border p-2"
-        >
-          <span className="text-xs text-muted-foreground">#{index + 1}</span>
-          <Input
-            value={photo}
-            onChange={(event) => updatePath(index, event.target.value)}
-            className="flex-1 text-sm"
-          />
-          <div className="flex gap-1">
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={() => movePhoto(index, "up")}
-              disabled={index === 0}
-            >
-              <ArrowUp className="size-4" />
-            </Button>
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={() => movePhoto(index, "down")}
-              disabled={index === photos.length - 1}
-            >
-              <ArrowDown className="size-4" />
-            </Button>
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={() => removePhoto(index)}
-            >
-              <Trash2 className="size-4" />
-            </Button>
+      {photos.map((photo, index) => {
+        const imageUrl = getStoragePublicUrl(photo);
+        return (
+          <div
+            key={photo + index}
+            className="flex items-center gap-3 rounded-xl border p-2"
+          >
+            {imageUrl && (
+              <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-muted">
+                <Image
+                  src={imageUrl}
+                  alt={`Preview ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="48px"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              </div>
+            )}
+            <span className="shrink-0 text-xs text-muted-foreground">
+              #{index + 1}
+            </span>
+            <Input
+              value={photo}
+              onChange={(event) => updatePath(index, event.target.value)}
+              className="flex-1 text-sm"
+            />
+            <div className="flex shrink-0 gap-1">
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                onClick={() => movePhoto(index, "up")}
+                disabled={index === 0}
+              >
+                <ArrowUp className="size-4" />
+              </Button>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                onClick={() => movePhoto(index, "down")}
+                disabled={index === photos.length - 1}
+              >
+                <ArrowDown className="size-4" />
+              </Button>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                onClick={() => removePhoto(index)}
+              >
+                <Trash2 className="size-4" />
+              </Button>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
