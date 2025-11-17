@@ -64,8 +64,10 @@ export async function saveFriendAction(values: FriendFormValues) {
 
   if (existing) {
     // Update existing friend
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result = await (supabaseServiceRole
       .from("friends")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .update(commonData as any)
       .eq("id", existing.id)
       .select()
@@ -74,8 +76,10 @@ export async function saveFriendAction(values: FriendFormValues) {
     error = result.error;
   } else {
     // Insert new friend
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result = await (supabaseServiceRole
       .from("friends")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .insert(commonData as any)
       .select()
       .single() as any);
